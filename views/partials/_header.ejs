@@ -10,5 +10,13 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
+    <form class="form-inline" method="post" action="/login">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="username" class="sr-only">Your username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="<%= username === undefined ? 'Create username' : username %>">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </form>
   </nav>
 </header>
+
