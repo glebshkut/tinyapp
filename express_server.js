@@ -50,6 +50,11 @@ app.post("/login", (req, res) => {
   res.redirect('/urls');
 })
 
+app.post("/logout", (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/urls');
+})
+
 app.post("/urls/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   urlDatabase[shortURL] = req.body.longURL;
