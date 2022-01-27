@@ -8,8 +8,6 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-        <a class="nav-item nav-link" href="/register">Register</a>
-        <a class="nav-item nav-link" href="/login">Log in</a>
       </div>
     </div>
     <% if (user) { %>
@@ -18,7 +16,10 @@
         <button type="submit" class="btn btn-danger mb-2">Log out</button>
       </form>
     <% } else { %>
-      <p>You're now signed in</p>
+      <div class="navbar-nav"></div>
+        <a class="btn btn-primary" style="margin-right: 3px;" href="/register">Register</a>
+        <a class="btn btn-primary" style="margin-left: 3px;" href="/login">Log in</a>
+      </div>
     <% } %>
   </nav>
 </header>
