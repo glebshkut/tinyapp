@@ -159,10 +159,13 @@ app.post("/urls", (req, res) => {
     res.redirect('/login');
   }
   let shortURL = generateRandomString();
-  urlDatabase[shortURL].longURL = req.body.longURL;
+  console.log("😁", urlDatabase);
   const user_id = req.cookies['user_id'];
-  urlDatabase[shortURL].userID = user_id;
-  res.redirect(`/urls/${shortURL}`);
+  urlDatabase[shortURL] = {
+    longURL : req.body.longURL,
+    userID : user_id
+  };
+  res.redirect(`/urls`);
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
