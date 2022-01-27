@@ -152,11 +152,17 @@ app.post("/logout", (req, res) => {
 })
 // CHANGED!
 app.post("/urls/:shortURL", (req, res) => {
+  const user_id = req.cookies['user_id'];
+  if (user_id === undefined || urlDatabase[req.params.shortURL].userID !== user_id) {
+    res.redirect('/404');
+    res.end();
+  } else {
   let shortURL = req.params.shortURL;
   urlDatabase[shortURL].longURL = req.body.longURL;
   const user_id = req.cookies['user_id'];
   urlDatabase[shortURL].userID = user_id;
   res.redirect("/urls");
+  }
 })
 // CHANGED!
 app.post("/urls", (req, res) => {
@@ -173,8 +179,15 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
+  const user_id = req.cookies['user_id'];
+  const deletedURL = urlDatabase[req.params.shortURL];
+  if (user_id === undefined || deletedURL.userID !== user_id) {
+    res.redirect('/404');
+    res.end();
+  } else {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect("/urls");
+  }
 })
 
 app.get("/404", (req, res) => {
