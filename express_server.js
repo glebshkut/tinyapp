@@ -16,6 +16,8 @@ charactersLength));
  }
  return result;
 }
+
+const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser')
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -30,12 +32,12 @@ const users = {
   "aJ48lW": {
     id: "aJ48lW", 
     email: "user@example.com", 
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
  "hdkU2s": {
     id: "hdkU2s", 
     email: "user2@example.com", 
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10)
   }
 }
 
@@ -67,7 +69,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const user = goForEveryEmail(req.body.email);
   if (user) {
-    if (users[user].password === req.body.password) {
+    if (bcrypt.compareSync(req.body.password, users[user].password)) {
       res.cookie('user_id', user);
       res.redirect('/urls');
     } else {
@@ -77,7 +79,7 @@ app.post('/login', (req, res) => {
     res.status(403).end();
   }
 });
-// CHANGED!
+
 app.get("/urls", (req, res) => {
   const user_id = req.cookies['user_id'];
   if (user_id === undefined) {
@@ -104,7 +106,7 @@ app.get("/urls/new", (req, res) => {
   }
   res.render("urls_new", templateVars);
 });
-// CHANGED!
+
 app.get("/urls/:shortURL", (req, res) => {
   const user_id = req.cookies['user_id'];
   if (user_id === undefined) {
@@ -119,7 +121,7 @@ app.get("/urls/:shortURL", (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
-// CHANGED!
+
 app.get("/u/:shortURL", (req, res) => {
   if (urlDatabase[req.params.shortURL] !== undefined) {
     const longURL = urlDatabase[req.params.shortURL].longURL;
@@ -140,8 +142,9 @@ app.post("/register", (req, res) => {
   users[randomUserId] = {
     id: randomUserId,
     email: req.body.email,
-    password: req.body.password,
+    password: bcrypt.hashSync(req.body.password, 10),
   };
+  console.log({users});
   res.cookie('user_id', randomUserId);
   res.redirect('/urls');
 });
