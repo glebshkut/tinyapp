@@ -88,6 +88,9 @@ app.get("/urls/new", (req, res) => {
   const templateVars = { 
     user: user
   };
+  if (!req.cookies['user_id']) {
+    res.redirect('/login');
+  }
   res.render("urls_new", templateVars);
 });
 
@@ -135,6 +138,9 @@ app.post("/urls/:shortURL", (req, res) => {
 })
 
 app.post("/urls", (req, res) => {
+  if (!req.cookies['user_id']) {
+    res.redirect('/login');
+  }
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
