@@ -1,11 +1,3 @@
-const getUserByEmail = (email, users) => {
-  for (const user in users) {
-    if (users[user].email === email) {
-      return user;
-    }
-  }
-}
-
 function generateRandomString() {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -17,6 +9,7 @@ charactersLength));
  return result;
 }
 
+const getUserByEmail = require('./helpers');
 const bcrypt = require('bcryptjs');
 const cookieParser = require("cookie-parser");
 const cookieSession = require('cookie-session')
