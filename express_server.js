@@ -80,17 +80,17 @@ app.post('/login', (req, res) => {
 // CHANGED!
 app.get("/urls", (req, res) => {
   const user_id = req.cookies['user_id'];
-  console.log('😙', user_id);
   if (user_id === undefined) {
     res.redirect('/login');
     res.end();
+  } else {
+    const user = users[user_id];
+    const templateVars = { 
+      user: user,
+      urls: urlDatabase 
+    };
+    res.render("urls_index", templateVars);
   }
-  const user = users[user_id];
-  const templateVars = { 
-    user: user,
-    urls: urlDatabase 
-  };
-  res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -121,8 +121,13 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 // CHANGED!
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(longURL);
+  if (urlDatabase[req.params.shortURL] !== undefined) {
+    const longURL = urlDatabase[req.params.shortURL].longURL;
+    res.redirect(longURL);
+  } else {
+    res.redirect('/404');
+    res.end();
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -159,7 +164,6 @@ app.post("/urls", (req, res) => {
     res.redirect('/login');
   }
   let shortURL = generateRandomString();
-  console.log("😁", urlDatabase);
   const user_id = req.cookies['user_id'];
   urlDatabase[shortURL] = {
     longURL : req.body.longURL,
@@ -172,6 +176,15 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 })
+
+app.get("/404", (req, res) => {
+  const user_id = req.cookies['user_id'];
+  const user = users[user_id];
+  const templateVars = { 
+    user: user
+  };
+  res.render('404', templateVars);
+});
 
 app.get("/*", (req, res) => {
   res.send("<html><body>Hello <b>World!</b><p>To be redirected to our app, click <a href=/urls>here</a></p></body></html>");
