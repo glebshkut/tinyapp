@@ -1,3 +1,11 @@
+const goForEveryEmail = (email) => {
+  for (const user in users) {
+    if (users[user].email === email) {
+      return true;
+    }
+  }
+}
+
 function generateRandomString() {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -43,6 +51,13 @@ app.get('/register', (req, res) => {
   res.render('register', templateVars);
 })
 
+app.get('/login', (req, res) => {
+  const templateVars = {
+    user: null
+  }
+  res.render('login', templateVars);
+})
+
 app.get("/urls", (req, res) => {
   const user_id = req.cookies['user_id'];
   const user = users[user_id];
@@ -72,12 +87,12 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
-});
-
 app.post("/register", (req, res) => {
+  if (req.body.email === '' || req.body.password === '') {
+    res.status(400).end();
+  } else if (goForEveryEmail(req.body.email)) {
+    res.status(400).end();
+  }
   let randomUserId = generateRandomString();
   users[randomUserId] = {
     id: randomUserId,
@@ -89,7 +104,7 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect('/urls');
 })
 

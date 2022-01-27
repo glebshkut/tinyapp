@@ -8,6 +8,8 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+        <a class="nav-item nav-link" href="/register">Register</a>
+        <a class="nav-item nav-link" href="/login">Log in</a>
       </div>
     </div>
     <% if (user) { %>
@@ -16,8 +18,7 @@
         <button type="submit" class="btn btn-danger mb-2">Log out</button>
       </form>
     <% } else { %>
-      <p>User doesn't exist</p>
-
+      <p>You're now signed in</p>
     <% } %>
   </nav>
 </header>
