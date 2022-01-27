@@ -1,7 +1,7 @@
 const goForEveryEmail = (email) => {
   for (const user in users) {
     if (users[user].email === email) {
-      return true;
+      return user;
     }
   }
 }
@@ -57,6 +57,20 @@ app.get('/login', (req, res) => {
   }
   res.render('login', templateVars);
 })
+
+app.post('/login', (req, res) => {
+  const user = goForEveryEmail(req.body.email);
+  if (user) {
+    if (users[user].password === req.body.password) {
+      res.cookie('user_id', user);
+      res.redirect('/urls');
+    } else {
+      res.status(403).end();
+    }
+  } else {
+    res.status(403).end();
+  }
+});
 
 app.get("/urls", (req, res) => {
   const user_id = req.cookies['user_id'];
