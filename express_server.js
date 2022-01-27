@@ -1,4 +1,4 @@
-const goForEveryEmail = (email) => {
+const getUserByEmail = (email, users) => {
   for (const user in users) {
     if (users[user].email === email) {
       return user;
@@ -73,7 +73,7 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  const user = goForEveryEmail(req.body.email);
+  const user = getUserByEmail(req.body.email, users);
   if (user) {
     if (bcrypt.compareSync(req.body.password, users[user].password)) {
       req.session.user_id = user;
@@ -141,7 +141,7 @@ app.get("/u/:shortURL", (req, res) => {
 app.post("/register", (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
     res.status(400).end();
-  } else if (goForEveryEmail(req.body.email)) {
+  } else if (getUserByEmail(req.body.email, users)) {
     res.status(400).end();
   }
   let randomUserId = generateRandomString();
@@ -150,7 +150,6 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 10),
   };
-  console.log({users});
   req.session.user_id = randomUserId;
   res.redirect('/urls');
 });
@@ -214,5 +213,5 @@ app.get("/*", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`🤩🤩🤩 Example app listening on port ${PORT}! 🤩🤩🤩`);
 });
