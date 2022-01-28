@@ -72,7 +72,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
-    res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/login'>Try one more time</a></body></html>").end();
+    return res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/login'>Try one more time</a></body></html>").end();
   }
   const user = getUserByEmail(req.body.email, users);
   if (user) {
@@ -80,10 +80,10 @@ app.post('/login', (req, res) => {
       req.session.user_id = user;
       res.redirect('/urls');
     } else {
-      res.status(403).send("<html><body><p>User doesn't exist</p><a href='/login'>Try one more time</a></body></html>").end();
+      res.status(403).send("<html><body><p>User doesn't exist or credentials are incorrect</p><a href='/login'>Try one more time</a></body></html>").end();
     }
   } else {
-    res.status(403).send("<html><body><p>User doesn't exist</p><a href='/login'>Try one more time</a></body></html>").end();
+    res.status(403).send("<html><body><p>User doesn't exist or credentials are incorrect</p><a href='/login'>Try one more time</a></body></html>").end();
   }
 });
 
@@ -142,9 +142,9 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/register", (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
-    res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/register'>Try one more time</a></body></html>").end();
+    return res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/register'>Try one more time</a></body></html>").end();
   } else if (getUserByEmail(req.body.email, users)) {
-    res.status(400).send("<html><body><p>User already exists</p><a href='/register'>Try one more time</a></body></html>").end();
+    return res.status(400).send("<html><body><p>User already exists</p><a href='/register'>Try one more time</a></body></html>").end();
   }
   let randomUserId = generateRandomString();
   users[randomUserId] = {
@@ -163,10 +163,8 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  const user_id = req.session.user_id;
-  if (user_id === undefined || urlDatabase[req.params.shortURL].userID !== user_id) {
-    res.redirect('/404');
-    res.end();
+  if (req.session.user_id === undefined || urlDatabase[req.params.shortURL].userID !== req.session.user_id) {
+    return res.redirect('/404');
   } else {
     let shortURL = req.params.shortURL;
     urlDatabase[shortURL].longURL = req.body.longURL;
@@ -178,7 +176,7 @@ app.post("/urls/:shortURL", (req, res) => {
 
 app.post("/urls", (req, res) => {
   if (!req.session.user_id) {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
   let shortURL = generateRandomString();
   const user_id = req.session.user_id;
@@ -190,9 +188,8 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const user_id = req.session.user_id;
   const deletedURL = urlDatabase[req.params.shortURL];
-  if (user_id === undefined || deletedURL.userID !== user_id) {
+  if (req.session.user_id === undefined || deletedURL.userID !== req.session.user_id) {
     res.redirect('/404');
     res.end();
   } else {
@@ -202,8 +199,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.get("/404", (req, res) => {
-  const user_id = req.session.user_id;
-  const user = users[user_id];
+  const user = null;
+  if (req.session.user_id !== undefined) {
+    const user_id = req.session.user_id;
+    user = users[user_id];
+  }
   const templateVars = {
     user: user
   };
