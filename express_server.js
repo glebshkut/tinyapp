@@ -72,7 +72,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
-    res.status(400).end();
+    res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/login'>Try one more time</a></body></html>").end();
   }
   const user = getUserByEmail(req.body.email, users);
   if (user) {
@@ -80,10 +80,10 @@ app.post('/login', (req, res) => {
       req.session.user_id = user;
       res.redirect('/urls');
     } else {
-      res.status(403).end();
+      res.status(403).send("<html><body><p>User doesn't exist</p><a href='/login'>Try one more time</a></body></html>").end();
     }
   } else {
-    res.status(403).end();
+    res.status(403).send("<html><body><p>User doesn't exist</p><a href='/login'>Try one more time</a></body></html>").end();
   }
 });
 
@@ -142,9 +142,9 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/register", (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
-    res.status(400).end();
+    res.status(400).send("<html><body><p>Email and password fields can't be empty</p><a href='/register'>Try one more time</a></body></html>").end();
   } else if (getUserByEmail(req.body.email, users)) {
-    res.status(400).end();
+    res.status(400).send("<html><body><p>User already exists</p><a href='/register'>Try one more time</a></body></html>").end();
   }
   let randomUserId = generateRandomString();
   users[randomUserId] = {
