@@ -11,7 +11,7 @@
       </div>
     </div>
     <% if (user) { %>
-      <h5 style="margin-top: 6px; color: #0013FF;">Your email is: <%= user.email %></h5>
+      <h5 style="margin-right: 5px; color: #0013FF;"><%= user.email %></h5>
       <form class="form-inline" method="post" action="/logout">
         <button type="submit" class="btn btn-danger mb-2">Log out</button>
       </form>
