@@ -4,9 +4,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 ***Login page***
-![](./images/login_page.png)
+![](./docs/login_page.png)
 ***My URLs page***
-![](./images/my_urls.png)
+![](./docs/my_urls.png)
 
 ## Dependencies
 
@@ -25,14 +25,14 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Features:
 - Page of URLs, available for a particular user
-![](./images/my_url.png)
+![](./docs/my_url.png)
 
 - Creating a new tinyURL
-![](./images/new_tinyUrl.png)
+![](./docs/new_tinyUrl.png)
 
 - Editing tinyURLs
-![](./images/url_edit.png)
+![](./docs/url_edit.png)
 
 - Accessing longURL via tinyURL
-![](./images/u_shortID.png)
+![](./docs/u_shortID.png)
 To access your URL type in `http://localhost:8080/u/`:shortURL
