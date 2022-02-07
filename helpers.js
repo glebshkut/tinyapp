@@ -6,7 +6,7 @@ const getUserByEmail = (email, users) => {
   }
 };
 
-const generateRandomString = function() {
+const generateRandomString = () => {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let charactersLength = characters.length;

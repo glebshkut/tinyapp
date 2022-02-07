@@ -17,29 +17,10 @@ const PORT = 8080;
 
 app.set("view engine", "ejs");
 
-const users = {
-  // "aJ48lW": {
-  //   id: "aJ48lW",
-  //   email: "user@example.com",
-  //   password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
-  // },
-  // "hdkU2s": {
-  //   id: "hdkU2s",
-  //   email: "user2@example.com",
-  //   password: bcrypt.hashSync("dishwasher-funk", 10)
-  // }
-};
+// Databases
+const users = {};
+const urlDatabase = {};
 
-const urlDatabase = {
-  // b6UTxQ: {
-  //   longURL: "https://www.tsn.ca",
-  //   userID: "aJ48lW"
-  // },
-  // i3BoGr: {
-  //   longURL: "https://www.google.ca",
-  //   userID: "aJ48lW"
-  // }
-};
 
 app.get('/register', (req, res) => {
   if (req.session.user_id !== undefined) {
@@ -153,7 +134,7 @@ app.post("/register", (req, res) => {
     return res.status(400).send("<html><body><p>User already exists</p><a href='/register'>Try one more time</a></body></html>");
   }
 
-  let randomUserId = generateRandomString();
+  const randomUserId = generateRandomString();
   users[randomUserId] = {
     id: randomUserId,
     email: req.body.email,
@@ -180,7 +161,7 @@ app.post("/urls/:shortURL", (req, res) => {
   if (req.session.user_id === undefined || urlDatabase[req.params.shortURL].userID !== req.session.user_id) {
     return res.send("Sorry. You don't have access to this page");
   } else {
-    let shortURL = req.params.shortURL;
+    const shortURL = req.params.shortURL;
     urlDatabase[shortURL].longURL = req.body.longURL;
     const user_id = req.session.user_id;
     urlDatabase[shortURL].userID = user_id;
@@ -194,7 +175,7 @@ app.post("/urls", (req, res) => {
     return res.redirect('/login');
   }
 
-  let shortURL = generateRandomString();
+  const shortURL = generateRandomString();
   const user_id = req.session.user_id;
   urlDatabase[shortURL] = {
     longURL : req.body.longURL,
@@ -221,11 +202,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.get("/404", (req, res) => {
-  let user = null;
-
   if (req.session.user_id !== undefined) {
     const user_id = req.session.user_id;
-    user = users[user_id];
+    const user = users[user_id];
+  } else {
+    const user = null;
   }
 
   const templateVars = {
