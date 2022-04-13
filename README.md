@@ -24,7 +24,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - Run the development web server using the `npm start` command.
 
 ## Features:
-- Page of URLs, available for a particular user
+- Page of URLs
 ![](./docs/my_url.png)
 
 - Creating a new tinyURL
