@@ -35,4 +35,4 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 - Accessing longURL via tinyURL
 ![](./docs/u_shortID.png)
-To access your URL type in `http://localhost:8080/u/`:shortURL
+To access your URL type in `http://localhost:8080/u/:shortURL`
